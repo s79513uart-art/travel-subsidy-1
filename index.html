@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 釜山自由行 Dashboard｜更新版</title>
+  <style>
+    :root{
+      --bg:#f6f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--line:#e5e7eb;
+      --blue:#2563eb;--blue2:#dbeafe;--green:#0f766e;--green2:#ccfbf1;
+      --amber:#b45309;--amber2:#fef3c7;--purple:#312e81;--purple2:#e0e7ff;
+      --pink:#be185d;--pink2:#fce7f3;--shadow:0 10px 28px rgba(15,23,42,.08);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif;background:radial-gradient(circle at top left,#e0f2fe 0,transparent 32%),radial-gradient(circle at top right,#fce7f3 0,transparent 28%),var(--bg);color:var(--text);line-height:1.65}
+    a{text-decoration:none;color:inherit}
+    .wrap{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:28px 0 56px}
+    .hero{background:linear-gradient(135deg,rgba(37,99,235,.97),rgba(15,118,110,.92));color:#fff;border-radius:28px;padding:30px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+    .hero:after{content:"";position:absolute;right:-70px;top:-90px;width:270px;height:270px;border-radius:999px;background:rgba(255,255,255,.16)}
+    .hero-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:18px;position:relative;z-index:1}
+    h1{font-size:clamp(30px,5vw,48px);line-height:1.12;margin:0 0 8px;letter-spacing:-.04em}
+    .hero p{margin:0;opacity:.92;font-size:17px}
+    .badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.23);font-weight:700;font-size:14px}
+    .flight{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:16px;backdrop-filter:blur(8px)}
+    .flight h3{margin:0 0 10px;font-size:16px}
+    .flight div{border-top:1px solid rgba(255,255,255,.18);padding:10px 0;font-size:14px}.flight div:first-of-type{border-top:0;padding-top:0}
+    .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}
+    .qcard,.panel,.summary,.item{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .qcard{padding:16px}.qcard .label{font-size:13px;color:var(--muted);margin-bottom:4px}.qcard .value{font-size:18px;font-weight:900}
+    .tabs{position:sticky;top:0;z-index:10;display:flex;gap:10px;overflow-x:auto;padding:14px 0;background:rgba(246,247,251,.9);backdrop-filter:blur(10px)}
+    .tab{white-space:nowrap;padding:10px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-weight:900;font-size:14px;box-shadow:0 2px 10px rgba(15,23,42,.05)}
+    .tab:hover{background:var(--blue2);color:#1d4ed8}
+    section{margin-top:24px}.title{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin-bottom:12px}.title h2{margin:0;font-size:26px;letter-spacing:-.02em}.subtitle{color:var(--muted);font-size:14px;font-weight:700}
+    .overview{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}.panel{padding:18px}.panel h3{margin:0 0 10px}
+    .route{display:grid;grid-template-columns:86px 1fr;gap:10px;border:1px solid var(--line);border-radius:14px;background:#fbfdff;padding:11px;margin-top:10px}.route b{color:#1d4ed8}.route span{color:#4b5563;font-size:14px}
+    .day{display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:start}.summary{padding:16px;position:sticky;top:72px}.summary h3{margin:0 0 10px}.summary ul{padding-left:18px;margin:8px 0;color:var(--muted);font-size:14px}
+    .timeline{display:grid;gap:14px}.item{padding:18px}.head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.item h3{margin:0;font-size:20px;letter-spacing:-.01em}.desc{margin:6px 0 0;color:#4b5563}
+    .time{display:inline-flex;white-space:nowrap;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--blue2);color:#1d4ed8;font-size:13px;font-weight:900}
+    .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.tag{font-size:12px;font-weight:900;border-radius:999px;padding:5px 9px;background:#f3f4f6;color:#374151}.food{background:#fee2e2;color:#991b1b}.cafe{background:#fef3c7;color:#92400e}.sea{background:#dbeafe;color:#1e40af}.night{background:var(--purple2);color:var(--purple)}.move{background:var(--green2);color:#115e59}.flex{background:#f3e8ff;color:#6b21a8}.shop{background:var(--pink2);color:var(--pink)}
+    .box{border-radius:14px;padding:12px 13px;margin-top:12px;font-size:14px}.box strong{display:block;color:#111827;margin-bottom:4px}.box ul{margin:6px 0 0;padding-left:18px}.transport{background:var(--green2);border:1px solid #99f6e4;color:#134e4a}.backup{background:#f9fafb;border:1px dashed #d1d5db;color:#4b5563}.note{background:var(--amber2);border:1px solid #fde68a;color:#78350f}
+    .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:9px 12px;border-radius:12px;background:#111827;color:#fff;font-weight:900;font-size:13px}.btn.alt{background:#eef2ff;color:#3730a3}.btn.green{background:#ecfdf5;color:#047857}
+    .footer{text-align:center;color:var(--muted);font-size:13px;margin-top:34px}
+    @media(max-width:900px){.hero-grid,.quick,.overview,.day{grid-template-columns:1fr}.summary{position:static}.head{flex-direction:column}.title{display:block}.subtitle{display:block;margin-top:4px}}
+    @media print{body{background:#fff}.tabs{display:none}.wrap{width:100%;padding:0}.hero,.qcard,.panel,.summary,.item{box-shadow:none}.day{grid-template-columns:1fr}.btns{display:none}.summary{position:static}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-grid">
+      <div>
+        <h1>2026 釜山自由行 Dashboard</h1>
+        <p>6/4（四）～6/7（日）｜海景 × 都市 × 夜生活 × 韓國感咖啡廳</p>
+        <div class="badges">
+          <span class="badge">🏨 住宿基準：西面 / 凡一站</span>
+          <span class="badge">🚕 跨區建議 Kakao T / Uber</span>
+          <span class="badge">🚇 T-money</span>
+          <span class="badge">🗺 NAVER Map / Kakao Map 優先</span>
+        </div>
+      </div>
+      <div class="flight">
+        <h3>✈️ 航班</h3>
+        <div><strong>去程｜Tigerair IT606</strong><br>6/4 16:40 桃園 T1 → 19:55 釜山</div>
+        <div><strong>回程｜Tigerair IT607</strong><br>6/7 20:45 釜山 → 22:10 桃園 T1</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="quick">
+    <div class="qcard"><div class="label">旅行天數</div><div class="value">4 天 3 夜</div></div>
+    <div class="qcard"><div class="label">住宿基準</div><div class="value">西面 / 凡一</div></div>
+    <div class="qcard"><div class="label">新版 DAY3</div><div class="value">南浦集中玩</div></div>
+    <div class="qcard"><div class="label">不再安排</div><div class="value">Spa Land / 無人機</div></div>
+  </div>
+
+  <nav class="tabs">
+    <a class="tab" href="#overview">總覽</a>
+    <a class="tab" href="#day1">DAY1 西面夜生活</a>
+    <a class="tab" href="#day2">DAY2 海雲台 × 廣安里</a>
+    <a class="tab" href="#day3">DAY3 南浦 × 甘川洞</a>
+    <a class="tab" href="#day4">DAY4 醫美 × 回程</a>
+    <a class="tab" href="#refs">其他備案</a>
+  </nav>
+
+  <section id="overview">
+    <div class="title">
+      <h2>行程總覽</h2>
+      <span class="subtitle">新版重點：第三天改成南浦周邊集中，不再跨到 Spa Land 或廣安里。</span>
+    </div>
+    <div class="overview">
+      <div class="panel">
+        <h3>每日主軸</h3>
+        <div class="route"><b>DAY1</b><span>抵達釜山 → 西面燒肉 → 田浦咖啡街 / 酒吧</span></div>
+        <div class="route"><b>DAY2</b><span>海雲台 → 尾浦家 → 按摩咖啡廳 → 廣安里夕陽 → 불필요 → 海景酒吧</span></div>
+        <div class="route"><b>DAY3</b><span>西面早餐 → 甘川洞 → BIFF / 國際市場 / 富平市場 → 札嘎其 → 白淺灘 → 回西面</span></div>
+        <div class="route"><b>DAY4</b><span>田浦 Brunch → 醫美 → Gentle Monster → 樂天百貨 → 機場</span></div>
+      </div>
+      <div class="panel">
+        <h3>交通判斷</h3>
+        <ul>
+          <li>DAY3 甘川洞、南浦、札嘎其、白淺灘屬於同一側，順很多。</li>
+          <li>甘川洞與白淺灘都建議搭計程車銜接，減少轉乘。</li>
+          <li>纜車不一定排；天氣好、體力好再加。</li>
+          <li>晚上回西面吃飯小酌，不再往 Centum City 或廣安里跑。</li>
+        </ul>
+        <div class="box note"><strong>早餐安排邏輯</strong>第三天 10:30 要從西面出發，建議 09:30～10:20 在西面先吃早餐；不要到甘川洞才找早餐，動線比較不順。</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="day1">
+    <div class="title"><h2>📍DAY1｜6/4（四）西面夜生活</h2><span class="subtitle">抵達、入住、吃燒肉、小酌。</span></div>
+    <div class="day">
+      <aside class="summary"><h3>今日節奏</h3><ul><li>19:55 抵達釜山</li><li>20:30～21:20 機場 → 西面</li><li>21:30～22:50 83해치</li><li>22:50～00:30 田浦 / 酒吧</li></ul></aside>
+      <div class="timeline">
+        <article class="item"><div class="head"><div><h3>金海機場 → 西面飯店</h3><p class="desc">晚上抵達有行李，多人同行建議計程車。</p></div><span class="time">19:55～21:20</span></div><div class="tags"><span class="tag move">交通</span></div><div class="box transport"><strong>交通</strong><ul><li>地鐵：金海機場輕軌 → 沙上站 → 地鐵 2 號線 → 西面，約 45～60 分鐘。</li><li>計程車：金海機場 → 西面 / 凡一，約 30～45 分鐘。</li></ul></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Gimhae+International+Airport+Busan" target="_blank">📍 金海機場</a><a class="btn alt" href="https://maps.google.com/?q=Seomyeon+Station+Busan" target="_blank">📍 西面站</a></div></article>
+        <article class="item"><div class="head"><div><h3>🍖 83해치 韓式燒肉</h3><p class="desc">第一晚主餐。若延誤，改豬肉湯飯或炸雞。</p></div><span class="time">21:30～22:50</span></div><div class="tags"><span class="tag food">晚餐</span><span class="tag night">西面</span></div><div class="box backup"><strong>備案</strong><ul><li>傳聞中的豬肉湯飯西面總店</li><li>Busan Jjok Jjok Galbi，烤肋排，朋友推薦</li><li>松亭三代豬肉湯飯，24小時</li><li>水邊最高豬肉湯飯</li><li>60雞炸雞廣安里店</li></ul></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=83%ED%95%B4%EC%B9%98+Busan" target="_blank">📍 83해치</a></div></article>
+        <article class="item"><div class="head"><div><h3>🍸 田浦咖啡街散步＋Pavox Bar</h3><p class="desc">吃完燒肉後散步、小酌，熟悉西面周邊。</p></div><span class="time">22:50～00:30</span></div><div class="tags"><span class="tag cafe">咖啡街</span><span class="tag night">酒吧</span></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Jeonpo+Cafe+Street+Busan" target="_blank">📍 田浦咖啡街</a><a class="btn alt" href="https://maps.google.com/?q=Pavox+Busan" target="_blank">📍 Pavox Bar</a></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="day2">
+    <div class="title"><h2>📍DAY2｜6/5（五）海雲台 × 廣安里</h2><span class="subtitle">白天海雲台，傍晚轉廣安里看夕陽夜景。</span></div>
+    <div class="day">
+      <aside class="summary"><h3>今日節奏</h3><ul><li>10:30 出發海雲台</li><li>11:30 鮑魚粥 / Brunch</li><li>13:00 尾浦家</li><li>14:30 按摩咖啡廳</li><li>18:10 廣安里夕陽</li><li>19:30 불필요</li></ul></aside>
+      <div class="timeline">
+        <article class="item"><div class="head"><div><h3>西面 → 海雲台</h3><p class="desc">參考遠一點就到：青沙浦，暫不排入。</p></div><span class="time">10:30</span></div><div class="tags"><span class="tag move">交通</span><span class="tag sea">海雲台</span></div><div class="box transport"><strong>交通細節</strong><ul><li>地鐵：西面站 → 地鐵 2 號線往 Jangsan → 海雲台站，約 40～50 分鐘。</li><li>計程車：西面 → 海雲台，約 30～45 分鐘。</li></ul></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Haeundae+Station+Busan" target="_blank">📍 海雲台站</a></div></article>
+        <article class="item"><div class="head"><div><h3>早餐：海雲台鮑魚粥</h3><p class="desc">抵達海雲台後先吃東西，再接海邊與中午行程。</p></div><span class="time">11:30～12:30</span></div><div class="tags"><span class="tag food">早餐</span></div><div class="box backup"><strong>備案</strong>duplit</div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Haeundae+abalone+porridge+Busan" target="_blank">📍 海雲台鮑魚粥</a><a class="btn alt" href="https://maps.google.com/?q=duplit+Busan" target="_blank">📍 duplit</a></div></article>
+        <article class="item"><div class="head"><div><h3>🌊 海雲台海邊散步</h3><p class="desc">簡單拍照、散步，不建議停太久。</p></div><span class="time">12:30～13:00</span></div><div class="tags"><span class="tag sea">海景</span></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Haeundae+Beach+Busan" target="_blank">📍 Haeundae Beach</a></div></article>
+        <article class="item"><div class="head"><div><h3>尾浦家 海雲台總店</h3><p class="desc">依你修正後指定安排。</p></div><span class="time">13:00～14:00</span></div><div class="tags"><span class="tag food">午餐</span></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=%EB%AF%B8%ED%8F%AC%EC%A7%91+%ED%95%B4%EC%9A%B4%EB%8C%80%EB%B3%B8%EC%A0%90" target="_blank">📍 尾浦家</a></div></article>
+        <article class="item"><div class="head"><div><h3>海雲台按摩咖啡廳</h3><p class="desc">飯後恢復體力，前一晚玩太晚也適合放鬆。</p></div><span class="time">14:30～16:00</span></div><div class="tags"><span class="tag cafe">咖啡</span><span class="tag flex">按摩</span></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Haeundae+massage+cafe+Busan" target="_blank">📍 搜尋按摩咖啡廳</a></div></article>
+        <article class="item"><div class="head"><div><h3>☕ Edge 993 海景咖啡 / 備案</h3><p class="desc">若時間夠可補海景咖啡；若想早點去廣安里，可跳過。</p></div><span class="time">16:10～17:30</span></div><div class="tags"><span class="tag cafe">咖啡</span><span class="tag sea">海景</span><span class="tag flex">彈性</span></div><div class="box backup"><strong>海雲台備案</strong>海木海雲台，必比登鰻魚飯。</div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Edge+993+Busan" target="_blank">📍 Edge 993</a><a class="btn alt" href="https://maps.google.com/?q=%ED%95%B4%EB%AA%A9+%ED%95%B4%EC%9A%B4%EB%8C%80+Busan" target="_blank">📍 海木海雲台</a></div></article>
+        <article class="item"><div class="head"><div><h3>海雲台 → 廣安里</h3><p class="desc">傍晚要卡夕陽，建議直接計程車轉場。</p></div><span class="time">17:30～18:10</span></div><div class="tags"><span class="tag move">交通</span></div><div class="box transport"><strong>交通</strong><ul><li>計程車：海雲台 → 廣安里，約 20～30 分鐘。</li><li>地鐵：海雲台站 → 廣安站 / 金蓮山站，再步行到海邊，約 30～40 分鐘。</li></ul></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Gwangalli+Beach+Busan" target="_blank">📍 廣安里海水浴場</a></div></article>
+        <article class="item"><div class="head"><div><h3>🌉 廣安里夕陽與夜景</h3><p class="desc">日落黃金拍攝時間約 18:50～19:30，建議 18:30 前抵達。</p></div><span class="time">18:10～19:30</span></div><div class="tags"><span class="tag sea">海景</span><span class="tag night">夜景</span></div><div class="box backup"><strong>廣安里補充</strong><ul><li>廣安里貝果店：All Sunday</li><li>廣安里的咖啡廳：gonagon，看海的好吃咖啡廳、吃晚餐</li></ul></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Gwangalli+Beach+Busan" target="_blank">📍 Gwangalli Beach</a><a class="btn alt" href="https://maps.google.com/?q=All+Sunday+Gwangalli+Busan" target="_blank">📍 All Sunday</a><a class="btn alt" href="https://maps.google.com/?q=gonagon+Gwangalli+Busan" target="_blank">📍 gonagon</a></div></article>
+        <article class="item"><div class="head"><div><h3>🍖 불필요 광안본점（王馨指定必吃）</h3><p class="desc">開到半夜 2 點，適合排在廣安里夜景主行程。</p></div><span class="time">19:30～21:00</span></div><div class="tags"><span class="tag food">晚餐</span><span class="tag night">指定必吃</span></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=%EB%B6%88%ED%95%84%EC%9A%94+%EA%B4%91%EC%95%88%EB%B3%B8%EC%A0%90" target="_blank">📍 불필요</a></div></article>
+        <article class="item"><div class="head"><div><h3>🍸 海景酒吧 / Millac the Market / hongdan busan</h3><p class="desc">吃烤肉 → 海邊散步 → 小酌。</p></div><span class="time">21:00～23:00</span></div><div class="tags"><span class="tag night">酒吧</span><span class="tag sea">海邊</span></div><div class="box backup"><strong>保留備註</strong><ul><li>必去酒吧區：Millac the Market 釜山水邊公園</li><li>hongdan busan：DJ、音樂、美食、文創市集潮流據點</li><li>無人機秀不排入本版行程。</li></ul></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Millac+the+Market+Busan" target="_blank">📍 Millac the Market</a><a class="btn alt" href="https://maps.google.com/?q=hongdan+busan" target="_blank">📍 hongdan busan</a></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="day3">
+    <div class="title"><h2>📍DAY3｜6/6（六）南浦 × 甘川洞 × 白淺灘 × 西面</h2><span class="subtitle">新版：取消 Spa Land、取消無人機，南浦同側集中玩。</span></div>
+    <div class="day">
+      <aside class="summary">
+        <h3>今日節奏</h3>
+        <ul>
+          <li>09:30～10:20 西面早餐</li>
+          <li>10:30 計程車前往甘川洞</li>
+          <li>11:20～12:40 甘川洞文化村</li>
+          <li>13:00～15:00 BIFF / 國際市場 / 富平市場</li>
+          <li>15:00～16:00 札嘎其市場</li>
+          <li>16:30～18:00 白淺灘文化村</li>
+          <li>19:00～晚上 回西面晚餐小酌</li>
+        </ul>
+      </aside>
+
+      <div class="timeline">
+        <article class="item">
+          <div class="head"><div><h3>早餐：西面先吃，再出發</h3><p class="desc">第三天 10:30 要搭車去甘川洞，早餐建議在西面解決，不要到山坡景點才找早餐。</p></div><span class="time">09:30～10:20</span></div>
+          <div class="tags"><span class="tag food">早餐</span><span class="tag move">西面出發前</span></div>
+          <div class="box backup">
+            <strong>早餐建議</strong>
+            <ul>
+              <li><strong>最穩：浦項豬肉湯飯 / 西面豬肉湯飯</strong>，釜山早餐感強、吃完有體力走路。</li>
+              <li><strong>清爽簡單：EGG DROP / 吐司 / 咖啡</strong>，適合不想太飽的人。</li>
+              <li><strong>懶人方案：便利商店＋咖啡</strong>，保留更多時間給甘川洞與南浦。</li>
+            </ul>
+          </div>
+          <div class="box note"><strong>我最推薦</strong>早餐吃西面豬肉湯飯。釜山豬肉湯飯店很多 24 小時營業，行程風險最低；若怕太重口味，再改 EGG DROP 或咖啡。</div>
+          <div class="btns">
+            <a class="btn" href="https://maps.google.com/?q=Pohang+Dwaeji+Gukbap+Seomyeon+Busan" target="_blank">📍 浦項豬肉湯飯</a>
+            <a class="btn alt" href="https://maps.google.com/?q=Seomyeon+dwaeji+gukbap+Busan" target="_blank">📍 西面豬肉湯飯</a>
+            <a class="btn alt" href="https://maps.google.com/?q=EGG+DROP+Seomyeon+Busan" target="_blank">📍 EGG DROP 西面</a>
+            <a class="btn alt" href="https://maps.google.com/?q=Jeonpo+Cafe+Street+Busan" target="_blank">📍 田浦咖啡街</a>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="head"><div><h3>西面出發，計程車前往甘川洞</h3><p class="desc">甘川洞在山坡上，搭地鐵轉公車不如直接叫車。</p></div><span class="time">10:30</span></div>
+          <div class="tags"><span class="tag move">交通</span><span class="tag flex">計程車優先</span></div>
+          <div class="box transport"><strong>交通方式</strong>西面 → 甘川洞文化村，計程車約 35～50 分鐘。建議用 Kakao T / Uber。</div>
+          <div class="btns"><a class="btn" href="https://maps.google.com/?q=Gamcheon+Culture+Village+Busan" target="_blank">📍 甘川洞文化村</a></div>
+        </article>
+
+        <article class="item">
+          <div class="head"><div><h3>甘川洞文化村</h3><p class="desc">彩色山城、巷弄、拍照。停留 1～1.5 小時即可，避免後面南浦行程被壓縮。</p></div><span class="time">11:20～12:40</span></div>
+          <div class="tags"><span class="tag cafe">文化村</span><span class="tag flex">拍照</span></div>
+          <div class="btns"><a class="btn" href="https://maps.google.com/?q=Gamcheon+Culture+Village+Busan" target="_blank">📍 Google Map</a></div>
+        </article>
+
+        <article class="item">
+          <div class="head"><div><h3>計程車前往 BIFF / 南浦</h3><p class="desc">甘川洞下山後直接接南浦，動線很順。</p></div><span class="time">12:40～13:00</span></div>
+          <div class="tags"><span class="tag move">交通</span></div>
+          <div class="box transport"><strong>交通方式</strong>甘川洞 → BIFF / 南浦，計程車約 10～20 分鐘。</div>
+          <div class="btns"><a class="btn" href="https://maps.google.com/?q=BIFF+Square+Busan" target="_blank">📍 BIFF廣場</a></div>
+        </article>
+
+        <article class="item">
+          <div class="head"><div><h3>BIFF廣場、糖餅、國際市場、富平市場、南浦洞地下街</h3><p class="desc">這段可以用步行串起來，邊吃邊逛，不用一直換車。</p></div><span class="time">13:00～15:00</span></div>
+          <div class="tags"><span class="tag food">糖餅小吃</span><span class="tag shop">市場逛街</span></div>
+          <div class="box backup">
+            <strong>保留備案</strong>
+            <ul>
+              <li>國際市場</li>
+              <li>富平市場</li>
+              <li>南浦洞地下街</li>
+            </ul>
+          </div>
+          <div class="btns">
+            <a class="btn" href="https://maps.google.com/?q=BIFF+Square+Busan" target="_blank">📍 BIFF廣場</a>
+            <a class="btn alt" href="https://maps.google.com/?q=Gukje+Market+Busan" target="_blank">📍 國際市場</a>
+            <a class="btn alt" href="https://maps.google.com/?q=Bupyeong+Kkangtong+Market+Busan" target="_blank">📍 富平市場</a>
+            <a class="btn alt" href="https://maps.google.com/?q=Nampo+Underground+Shopping+Center+Busan" target="_blank">📍 南浦地下街</a>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="head"><div><h3>札嘎其市場</h3><p class="desc">市場散步、看海鮮，也可以當下午小吃點。</p></div><span class="time">15:00～16:00</span></div>
+          <div class="tags"><span class="tag food">市場</span><span class="tag sea">港口感</span></div>
+          <div class="btns"><a class="btn" href="https://maps.google.com/?q=Jagalchi+Market+Busan" target="_blank">📍 札嘎其市場</a></div>
+        </article>
+
+        <article class="item">
+          <div class="head"><div><h3>計程車前往白淺灘文化村</h3><p class="desc">從札嘎其 / 南浦過去影島白淺灘，建議直接叫車。</p></div><span class="time">16:00～16:25</span></div>
+          <div class="tags"><span class="tag move">交通</span></div>
+          <div class="box transport"><strong>交通方式</strong>札嘎其 / 南浦 → 白淺灘文化村，計程車約 15～25 分鐘。</div>
+          <div class="btns"><a class="btn" href="https://maps.google.com/?q=Huinnyeoul+Culture+Village+Busan" target="_blank">📍 白淺灘文化村</a></div>
+        </article>
+
+        <article class="item">
+          <div class="head"><div><h3>白淺灘文化村 / 影島海景散步</h3><p class="desc">傍晚看海、散步、拍照。比再跨區去 Spa Land 或廣安里舒服很多。</p></div><span class="time">16:30～18:00</span></div>
+          <div class="tags"><span class="tag sea">海景</span><span class="tag flex">散步拍照</span></div>
+          <div class="btns"><a class="btn" href="https://maps.google.com/?q=Huinnyeoul+Culture+Village+Busan" target="_blank">📍 Google Map</a></div>
+        </article>
+
+        <article class="item">
+          <div class="head"><div><h3>計程車回西面</h3><p class="desc">走了一整天，這段不建議搭大眾交通，直接回西面休息、吃晚餐。</p></div><span class="time">18:00～18:40</span></div>
+          <div class="tags"><span class="tag move">交通</span><span class="tag flex">回住宿區</span></div>
+          <div class="box transport"><strong>交通方式</strong>白淺灘 / 影島 → 西面，計程車約 30～45 分鐘。</div>
+          <div class="btns"><a class="btn" href="https://maps.google.com/?q=Seomyeon+Station+Busan" target="_blank">📍 西面站</a></div>
+        </article>
+
+        <article class="item">
+          <div class="head"><div><h3>西面晚餐、小酌、田浦咖啡街</h3><p class="desc">第三天晚上不再跨區，回西面吃飯、小酌，隔天還有醫美與回程。</p></div><span class="time">19:00～晚上</span></div>
+          <div class="tags"><span class="tag food">晚餐</span><span class="tag night">西面夜生活</span><span class="tag cafe">田浦</span></div>
+          <div class="box backup">
+            <strong>晚餐備案保留</strong>
+            <ul>
+              <li>明星 / 名聲一隻雞</li>
+              <li>청조횟집 冰沙生魚片</li>
+              <li>百花烤腸</li>
+              <li>密陽血腸豬肉湯飯</li>
+              <li>傳聞中的豬肉湯飯西面總店</li>
+              <li>松亭三代豬肉湯飯，24小時</li>
+              <li>Busan Jjok Jjok Galbi，烤肋排，朋友推薦</li>
+            </ul>
+          </div>
+          <div class="btns">
+            <a class="btn" href="https://maps.google.com/?q=Seomyeon+restaurants+Busan" target="_blank">📍 西面餐廳</a>
+            <a class="btn alt" href="https://maps.google.com/?q=Jeonpo+Cafe+Street+Busan" target="_blank">📍 田浦咖啡街</a>
+          </div>
+        </article>
+
+        <article class="item">
+          <div class="head"><div><h3>彈性加排：松島海上纜車</h3><p class="desc">纜車不一定要。天氣好、體力夠再加；若加纜車，建議壓縮南浦逛街時間。</p></div><span class="time">可選</span></div>
+          <div class="tags"><span class="tag sea">海景</span><span class="tag flex">彈性</span></div>
+          <div class="box note"><strong>加排方式</strong>13:00～14:15 南浦簡逛 → 14:30～16:00 松島纜車 → 16:30 白淺灘。若天氣陰或大家累了，直接跳過。</div>
+          <div class="btns"><a class="btn" href="https://maps.google.com/?q=Busan+Air+Cruise" target="_blank">📍 松島海上纜車</a><a class="btn alt" href="https://maps.google.com/?q=Songdo+Beach+Busan" target="_blank">📍 松島海水浴場</a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="day4">
+    <div class="title"><h2>📍DAY4｜6/7（日）Brunch × 醫美 × 回程</h2><span class="subtitle">不要排太滿，18:00 左右前往機場。</span></div>
+    <div class="day">
+      <aside class="summary"><h3>今日節奏</h3><ul><li>10:30 田浦 Brunch</li><li>13:30～16:00 醫美</li><li>16:00 Gentle Monster</li><li>16:30 樂天百貨</li><li>18:00 前往機場</li></ul></aside>
+      <div class="timeline">
+        <article class="item"><div class="head"><div><h3>🥐 田浦咖啡街 Brunch</h3><p class="desc">醫美前不要排太遠，田浦 / 西面一帶最順。</p></div><span class="time">10:30～12:00</span></div><div class="tags"><span class="tag cafe">Brunch</span></div><div class="box backup"><strong>備案</strong><ul><li>Strut Coffee</li><li>EGG DROP</li><li>Shake Shack</li></ul></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Jeonpo+Cafe+Street+Busan" target="_blank">📍 田浦咖啡街</a><a class="btn alt" href="https://maps.google.com/?q=Strut+Coffee+Busan" target="_blank">📍 Strut Coffee</a><a class="btn alt" href="https://maps.google.com/?q=EGG+DROP+Seomyeon+Busan" target="_blank">📍 EGG DROP</a><a class="btn alt" href="https://maps.google.com/?q=Shake+Shack+Seomyeon+Busan" target="_blank">📍 Shake Shack</a></div></article>
+        <article class="item"><div class="head"><div><h3>回飯店整理 / 前往醫美</h3><p class="desc">建議前一天先確認診所位置、報到時間、是否需要空腹或避免酒精。</p></div><span class="time">12:00～13:00</span></div><div class="tags"><span class="tag flex">緩衝</span></div></article>
+        <article class="item"><div class="head"><div><h3>💆 醫美</h3><p class="desc">保留原行程。若診所在西面，整體動線最順。</p></div><span class="time">13:30～16:00</span></div><div class="tags"><span class="tag flex">固定行程</span></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Seomyeon+medical+beauty+clinic+Busan" target="_blank">📍 西面醫美搜尋</a></div></article>
+        <article class="item"><div class="head"><div><h3>Gentle Monster 買墨鏡</h3><p class="desc">視店點位置調整；時間緊可改去樂天百貨內或附近百貨找。</p></div><span class="time">16:00～16:30</span></div><div class="tags"><span class="tag shop">購物</span></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Gentle+Monster+Busan" target="_blank">📍 Gentle Monster</a></div></article>
+        <article class="item"><div class="head"><div><h3>🛍 樂天百貨</h3><p class="desc">最後採買伴手禮、確認退稅、整理行李。</p></div><span class="time">16:30～18:00</span></div><div class="tags"><span class="tag shop">百貨</span><span class="tag flex">退稅</span></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Lotte+Department+Store+Busan+Main+Branch" target="_blank">📍 樂天百貨釜山本店</a></div></article>
+        <article class="item"><div class="head"><div><h3>前往金海機場</h3><p class="desc">20:45 起飛，18:00 左右前往機場，預留退稅、行李、安檢。</p></div><span class="time">18:00</span></div><div class="tags"><span class="tag move">回程交通</span></div><div class="box transport"><strong>交通</strong><ul><li>計程車：西面 / 樂天百貨 → 金海機場，約 30～45 分鐘；週末傍晚建議抓 45～60 分鐘。</li><li>地鐵：西面 → 地鐵 2 號線到沙上站 → 轉金海輕軌 → 金海機場，約 45～60 分鐘。</li></ul></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Gimhae+International+Airport+Busan" target="_blank">📍 金海國際機場</a></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="refs">
+    <div class="title"><h2>其他景點參考</h2><span class="subtitle">雨天、體力充足、臨時替換用。</span></div>
+    <div class="timeline">
+      <article class="item"><div class="head"><div><h3>ARTE MUSEUM CIRCLE BUSAN 看光展</h3><p class="desc">適合雨天備案、拍照行程。</p></div><span class="time">備案</span></div><div class="tags"><span class="tag flex">雨天</span></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=ARTE+MUSEUM+BUSAN" target="_blank">📍 ARTE MUSEUM BUSAN</a></div></article>
+      <article class="item"><div class="head"><div><h3>VISIT BUSAN PASS</h3><p class="desc">48小時：約 85,000 韓元。若安排很多付費景點，再評估是否划算。</p></div><span class="time">評估</span></div><div class="tags"><span class="tag flex">票券</span></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=VISIT+BUSAN+PASS" target="_blank">📍 搜尋 PASS</a></div></article>
+      <article class="item"><div class="head"><div><h3>釜山斜坡滑車 Skyline Luge</h3><p class="desc">刺激型活動，可放東釜山方向；本次行程偏滿，建議只作備案。</p></div><span class="time">備案</span></div><div class="tags"><span class="tag flex">活動</span></div><div class="btns"><a class="btn" href="https://maps.google.com/?q=Skyline+Luge+Busan" target="_blank">📍 Skyline Luge Busan</a></div></article>
+    </div>
+  </section>
+
+  <div class="footer">2026 釜山自由行 Dashboard｜更新版：DAY3 改為南浦集中行程。實際營業時間與交通請以 NAVER Map / Kakao Map 當天查詢。</div>
+</div>
+</body>
+</html>
